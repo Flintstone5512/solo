@@ -59,7 +59,7 @@ export const pages = [
     {
         id: 1,
         image: Onboard1,
-        heading: 'Welcome to BGFinancz!',    
+        heading: 'Welcome to Solo Money',    
         text: "Your journey to smarter banking starts here. Explore powerful tools and features designed for you.",
     },
     {
@@ -71,7 +71,7 @@ export const pages = [
     {
         id: 3,
         image: Onboard3,
-        heading: 'Track Your Spending',
+        heading: 'Build Credit, Save $60,000 on Taxes, Secure Your Financial Future',
         text: "Get real-time insights and manage your budget effortlessly. Stay on top of your finances with ease.",
     },
 ];

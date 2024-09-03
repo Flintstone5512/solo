@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Back from "../../assets/images/Back.svg";
 import Dark_back from "../../assets/images/White_back.svg";
 import { Cabin_700Bold } from '@expo-google-fonts/cabin';
@@ -8,44 +8,71 @@ import Card2 from "../../assets/images/Card2.png";
 import Wallet_section2 from '../../components/Wallet_section2/Wallet_section2';
 import Common_tabs from '../../components/Tabs/common_tabs';
 import ThemeContext from '../../theme/ThemeContext';
+import { UNCardComponent, UNCardData } from 'react-native-unit-components';
+import { NativeModules, UIManager } from 'react-native';
+const { PushProvisioningModule } = NativeModules;
 
 const screenWidth = Dimensions.get('window').width;
 
 const Wallet = () => {
-  const { theme,  darkMode } = useContext(ThemeContext);
+  const { theme, darkMode } = useContext(ThemeContext);
+
+// Debugging: Log NativeModules and PushProvisioningModule
+console.log('NativeModules:', NativeModules);
+console.log('PushProvisioningModule:', PushProvisioningModule);
+
+useEffect(() => {
+  console.log('UIManager:', UIManager); // Log UIManager to check if Unsecureview is registered
+}, []);
+
   const back = () => {
-    router.push('home');
+    router.push('/homedashboard');
   };
 
   return (
-    <View style={[styles.container, {backgroundColor:theme.background}]}>
+    <View style={[styles.container, {backgroundColor: theme.background}]}>
       <View style={styles.header}>
         <TouchableOpacity onPress={back}>
-         {darkMode? <Dark_back /> : <Back /> }
+          {darkMode ? <Dark_back /> : <Back />}
         </TouchableOpacity>
-        <Text style={[styles.heading, {color:theme.color}]}>Wallet</Text>
+        <Text style={[styles.heading, {color: theme.color}]}>Wallet</Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.itemContainer}>
-        <View style={styles.item}>
-          <View style={styles.imageContainer}>
-            <Image source={Card2} style={styles.image} />
-            <View style={styles.content}>
-              <Text style={styles.name_head}>name</Text>
-              <Text style={styles.name}>Satoru Gojo</Text>
-              <View style={styles.card_row}>
-                <Text style={styles.cardNo}>4756 <Text style={styles.cardNo_pin}> . . . .   . . . .  </Text>9018</Text>
-                <Text style={styles.expire}>11/24</Text>
+        <View style={styles.itemContainer}>
+          <View style={styles.item}>
+            <View style={styles.imageContainer}>
+              <Image source={Card2} style={styles.image} />
+              <View style={styles.content}>
+                <Text style={styles.name_head}>name</Text>
+                <Text style={styles.name}>Satoru Gojo</Text>
+                <View style={styles.card_row}>
+                  <Text style={styles.cardNo}>4756 <Text style={styles.cardNo_pin}> . . . .   . . . .  </Text>9018</Text>
+                  <Text style={styles.expire}>11/24</Text>
+                </View>
+                <Text style={styles.balance_head}>balance</Text>
+                <Text style={styles.balance}>$3,469.52</Text>
               </View>
-              <Text style={styles.balance_head}>balance</Text>
-              <Text style={styles.balance}>$3,469.52</Text>
             </View>
           </View>
         </View>
-      </View>
-      <Wallet_section2 />
-      <Text style={[styles.transaction, {color:theme.color}]}>transaction</Text>
-      <Common_tabs />
+
+        {/* Insert the new card component here */}
+        <View style={{ height: 200, backgroundColor: 'red' }}>
+          <Text>Placeholder for UNCardComponent</Text>
+        </View>
+
+        <UNCardComponent
+          cardId={'2214322'}
+          customerToken={'2240965'}
+          onStatusChanged={(card: UNCardData) => { console.log(card) }}
+          onCardActivated={(card: UNCardData) => { console.log(card) }}
+          pushProvisioningModule={PushProvisioningModule}
+          onLoad={(response) => { console.log(response) }}
+        />
+
+        <Wallet_section2 />
+        <Text style={[styles.transaction, {color: theme.color}]}>transaction</Text>
+        <Common_tabs />
       </ScrollView>
     </View>
   );

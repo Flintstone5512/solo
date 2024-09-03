@@ -4,11 +4,11 @@ import Profile from "../../assets/images/home_profile.png";
 import Notification from "../../assets/images/Qr_scan.svg";
 import { Lato_400Regular } from '@expo-google-fonts/lato';
 import { Cabin_700Bold } from '@expo-google-fonts/cabin';
-import { categories, last_transaction, send_money, swipper_data } from '../../components/Data/Data';
-import CustomSwiper from '../../components/Swiper/Swiper';
+import { categories, last_transaction, send_money, swipper_data } from './components/Data/Data';
+import CustomSwiper from './components/Swiper/Swiper';
 import { router, Link } from "expo-router";
-import Common_tabs from '../../components/Tabs/common_tabs';
-import ThemeContext from '../../theme/ThemeContext';
+import Common_tabs from './components/Tabs/common_tabs';
+import ThemeContext from './theme/ThemeContext';
 
 const Home = () => {
   const { theme,  darkMode } = useContext(ThemeContext);

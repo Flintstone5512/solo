@@ -49,7 +49,7 @@ const Verification = () => {
 
     const location = () => {
         setIsModalVisible(false);
-        router.push('home');
+        router.push('homedashboard');
     };
 
     const back = () => {

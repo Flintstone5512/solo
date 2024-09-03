@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback, useContext } from "rea
 import { View, Text, StyleSheet, Dimensions, ScrollView, StatusBar, Animated, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { pages } from "../components/Data/Data";
-import { router } from "expo-router";
+import { useRouter } from "expo-router"; // Import useRouter here
 import Button from "../components/Button/Button";
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
@@ -11,18 +11,17 @@ import { Cabin_400Regular, Cabin_500Medium, Cabin_600SemiBold, Cabin_700Bold } f
 import { Lato_400Regular, Lato_700Bold } from "@expo-google-fonts/lato";
 import ThemeContext from "../theme/ThemeContext";
 
-
-
 const { width } = Dimensions.get('window');
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const { theme,  darkMode } = useContext(ThemeContext);
+  const { theme, darkMode } = useContext(ThemeContext);
   const navigation = useNavigation();
   const swiperRef = useRef(null);
   const totalPages = pages.length;
   const [activePageIndex, setActivePageIndex] = useState(0);
+  const router = useRouter(); // Define router using useRouter
 
   const [fontsLoaded] = useFonts({
     Cabin_700Bold,
@@ -78,11 +77,11 @@ export default function App() {
   }
 
   return (
-    <View style={[styles.safearea, {backgroundColor:theme.background}]} onLayout={onLayoutRootView}>
-          <StatusBar 
+    <View style={[styles.safearea, { backgroundColor: theme.background }]} onLayout={onLayoutRootView}>
+      <StatusBar
         translucent
         backgroundColor="transparent"
-        barStyle={darkMode ? "light-content" : "dark-content"} 
+        barStyle={darkMode ? "light-content" : "dark-content"}
       />
       <ScrollView
         horizontal
@@ -103,16 +102,16 @@ export default function App() {
         ))}
       </ScrollView>
       <View style={styles.onboard_content}>
-      <Animated.View style={{ opacity: paginationOpacity }}>
+        <Animated.View style={{ opacity: paginationOpacity }}>
           <Pagination activePageIndex={activePageIndex} totalPages={totalPages} />
         </Animated.View>
-        <Animated.Text style={[[styles.heading, {color:theme.color}], { opacity: headingOpacity }]}>
+        <Animated.Text style={[[styles.heading, { color: theme.color }], { opacity: headingOpacity }]}>
           {pages[activePageIndex].heading}
         </Animated.Text>
         <Animated.Text style={[styles.description, { opacity: descriptionOpacity }]}>
           {pages[activePageIndex].text}
         </Animated.Text>
-       
+
         <View style={styles.page_button_container}>
           {activePageIndex === totalPages - 1 ? (
             <View style={{ paddingTop: 15 }}>
@@ -120,12 +119,12 @@ export default function App() {
                 buttonText="Get started"
                 backgroundColor="#3629B7"
                 textColor='#FFFFFF'
-                onPress={() => router.push('create_account')}
+                onPress={() => router.push('splash')} // Use router.push to navigate
               />
             </View>
           ) : (
             <TouchableOpacity onPress={handleNextPress} style={styles.nextButton}>
-             <Text style={styles.nextButtonText}>next</Text>
+              <Text style={styles.nextButtonText}>next</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -143,7 +142,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 50,
-    
   },
   imageContainer: {
     height: 330,
