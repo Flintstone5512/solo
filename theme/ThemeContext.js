@@ -1,40 +1,34 @@
-
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const lightTheme = {
-  background: '#FFFFFF',
-  background2: '#0890FE',
-  color: '#000000',
-  color2: 'rgba(0,0,0,.2)',
-  color3: '#757575',
+  background: '#F9F9FF',
+  background2: '#7C00FF', // purple accent
+  color: '#1C1C1C',
+  color2: '#757575',
+  color3: '#555',
   log: '#FE1717',
-  text: '#000000',
-  coloring: '#ffffff',
-  cardbg: '#f6f6f6',
-  cardbg2: '#f6f6f6',
-  cardbg3: '#f6f6f6',
-  card: '#f6f6f6',
-  overlay:  'rgba(0, 0, 0, 0.5)',
-  bordercolor: '#3629B7',
+  text: '#000',
+  cardbg: '#FFFFFF',
+  cardbg2: '#F3F3FF',
+  cardbg3: '#EFEFFF',
+  bordercolor: '#7C00FF',
+  accent: '#00E0C7' // teal
 };
 
 const darkTheme = {
-  background: '#000000',
-  background2: '#FFAF2A',
+  background: '#0D0D1F',
+  background2: '#00E0C7', // teal highlight
   color: '#FFFFFF',
-  color2: '#ffffff',
-  color3: '#ffffff',
-  color4: '#ffffff',
+  color2: '#BBB',
+  color3: '#888',
   log: '#FE1717',
   text: '#BABABA',
-  coloring: '#333333',
-  cardbg: '#333333',
-  cardbg2: '#BABABA',
-  cardbg3: 'rgba(238, 238, 238, 0.2)',
-  card: '#757575',
-  overlay: 'rgba(255, 255, 255, 0.4)',
-  bordercolor: '#FFAF2A',
+  cardbg: '#1C1C3A',
+  cardbg2: '#2A2A4A',
+  cardbg3: '#333355',
+  bordercolor: '#7C00FF',
+  accent: '#FFD700' // gold for punch
 };
 
 const ThemeContext = createContext();
@@ -56,7 +50,6 @@ export const ThemeProvider = ({ children }) => {
         console.error("Error loading dark mode state:", error);
       }
     };
-
     loadDarkModeState();
   }, []);
 

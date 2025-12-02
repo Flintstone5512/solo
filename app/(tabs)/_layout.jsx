@@ -1,122 +1,77 @@
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { Tabs } from 'expo-router';
-import React, { useContext } from 'react';
-import Home from "../../assets/images/home.svg";
-import Wallet from "../../assets/images/wallet.svg";
-import Booking from "../../assets/images/transaction.svg";
-import Profile from "../../assets/images/profile.svg";
-import Active_Home from "../../assets/images/active_home.svg";
-import Active_Wallet from "../../assets/images/active_wallet.svg";
-import Active_Booking from "../../assets/images/active_booking.svg";
-import Active_Profile from "../../assets/images/active_profile.svg";
-import { Cabin_500Medium, Cabin_700Bold } from '@expo-google-fonts/cabin';
-import ThemeContext from '../../theme/ThemeContext';
-import Dark_active1 from "../../assets/images/dark_active_profile1.svg";
-import Dark_active2 from "../../assets/images/dark_active_profile2.svg";
-import Dark_active3 from "../../assets/images/dark_active_profile3.svg";
-import Dark_active4 from "../../assets/images/dark_active_profile4.svg";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { Tabs } from "expo-router";
+import React, { useContext } from "react";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 
+import Home from "../../assets/images/homes.svg";
+import Bills from "../../assets/images/bills.svg";
+import Dreams from "../../assets/images/dreams.svg";
+import Profile from "../../assets/images/profiles.svg";
+import Transactions from "../../assets/images/transactions.svg";
 
+import ThemeContext from "../../theme/ThemeContext";
+
+// Reusable animated tab button
 const TabBarButton = ({ children, onPress, accessibilityState, title }) => {
-  const { theme, darkMode } = useContext(ThemeContext);
-
   const isSelected = accessibilityState.selected;
+  const opacity = useSharedValue(isSelected ? 1 : 0);
+
+  React.useEffect(() => {
+    opacity.value = withTiming(isSelected ? 1 : 0, { duration: 250 });
+  }, [isSelected]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    backgroundColor: `rgba(124, 0, 255, ${0.08 * opacity.value})`,
+    transform: [{ scale: withTiming(isSelected ? 1.05 : 1, { duration: 200 }) }],
+  }));
+
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[
-        styles.tabButton,
-        isSelected ? [styles.activeTabButton] : null,
-      ]}
-    >
-      {children}
-      <Text style={[styles.tabTitle, isSelected ? [styles.activeTabTitle, { color: theme.bordercolor }] : styles.tabTitle]}>
-        {title}
-      </Text>
+    <TouchableOpacity onPress={onPress} style={styles.tabButton} activeOpacity={0.9}>
+      <Animated.View style={[styles.tabInner, animatedStyle]}>
+        {children}
+        <Text style={[styles.tabTitle, isSelected && styles.activeTabTitle]}>
+          {title}
+        </Text>
+      </Animated.View>
     </TouchableOpacity>
   );
 };
 
 const TabsLayout = () => {
-  const { theme, darkMode } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Tabs
         screenOptions={({ route }) => ({
           tabBarShowLabel: false,
-          tabBarButton: (props) => (
-            <TabBarButton {...props} title={route.name} />
-          ),
+          tabBarButton: (props) => <TabBarButton {...props} title={route.name} />,
           tabBarStyle: [styles.tabBar, { backgroundColor: theme.cardbg }],
           headerShown: false,
           tabBarIcon: ({ focused }) => {
-            let IconComponent;
-            if (focused) {
-              switch (route.name) {
-                case 'home':
-                  IconComponent = darkMode ? Dark_active1 : Active_Home;
-                  break;
-                case 'transaction':
-                  IconComponent = darkMode ? Dark_active2 : Active_Booking;
-                  break;
-                case 'wallet':
-                  IconComponent = darkMode ? Dark_active3 : Active_Wallet;
-                  break;
-                case 'profile':
-                  IconComponent = darkMode ? Dark_active4 : Active_Profile;
-                  break;
-                default:
-                  IconComponent = Home;
-                  break;
-              }
-            } else {
-              switch (route.name) {
-                case 'home':
-                  IconComponent = Home;
-                  break;
-                case 'transaction':
-                  IconComponent = Booking;
-                  break;
-                case 'wallet':
-                  IconComponent = Wallet;
-                  break;
-                case 'profile':
-                  IconComponent = Profile;
-                  break;
-                default:
-                  IconComponent = Home;
-                  break;
-              }
+            // since your SVGs already contain their own colors, no tint or fill is applied
+            switch (route.name) {
+              case "home":
+                return <Home width={26} height={26} />;
+              case "bills":
+                return <Bills width={26} height={26} />;
+              case "dreams":
+                return <Dreams width={26} height={26} />;
+              case "profile":
+                return <Profile width={26} height={26} />;
+              case "transactions":
+                return <Transactions width={26} height={26} />;
+              default:
+                return <Home width={26} height={26} />;
             }
-            return <IconComponent />;
           },
         })}
       >
-        <Tabs.Screen
-          name="home"
-          options={{
-            title: 'Home',
-          }}
-        />
-        <Tabs.Screen
-          name="transaction"
-          options={{
-            title: 'Transaction',
-          }}
-        />
-        <Tabs.Screen
-          name="wallet"
-          options={{
-            title: 'Wallet',
-          }}
-        />
-        <Tabs.Screen
-          name="profile"
-          options={{
-            title: 'Profile',
-          }}
-        />
+        <Tabs.Screen name="home" options={{ title: "Home" }} />
+        <Tabs.Screen name="bills" options={{ title: "Bills" }} />
+        <Tabs.Screen name="dreams" options={{ title: "Dreams" }} />
+        <Tabs.Screen name="transactions" options={{ title: "Transactions" }} />
+        <Tabs.Screen name="profile" options={{ title: "Profile" }} />
       </Tabs>
     </View>
   );
@@ -125,39 +80,44 @@ const TabsLayout = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
   tabBar: {
-    width: '100%',
-    maxHeight: 85,
-    height: '100%',
-    borderTopWidth: 0,
-    elevation: 0,
-    backgroundColor: '#F6F6F6',
-    borderRadius: 10,
-    paddingTop: 10,
-    paddingHorizontal: 15,
+    flexDirection: "row",
+    height: 70,
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
+    backgroundColor: "#FAF8FF",
+    borderTopWidth: 0.5,
+    borderTopColor: "rgba(124,0,255,0.1)",
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: -2 },
+    shadowRadius: 6,
+    elevation: 5,
   },
   tabButton: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 7,
-    paddingTop: 10, 
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tabInner: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
   },
   tabTitle: {
     fontSize: 12,
-    fontFamily: 'Cabin_500Medium',
-    color: '#757575',
-    textTransform: 'capitalize',
-    paddingTop: 10, 
-    paddingBottom: 15,
+    color: "#A199C5",
+    marginTop: 4,
+    textTransform: "capitalize",
   },
   activeTabTitle: {
-    color: '#3629B7',
-    fontFamily: 'Cabin_700Bold',
+    color: "#7C00FF",
+    fontWeight: "700",
   },
-  activeTabButton: {},
 });
 
 export default TabsLayout;

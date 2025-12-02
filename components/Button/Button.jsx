@@ -1,46 +1,28 @@
-import { Cabin_700Bold } from '@expo-google-fonts/cabin';
-import React, { useContext } from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
-
-const Button = ({ buttonText, onPress, backgroundColor, textColor, borderColor }) => {
-  
+const Button = ({ buttonText, onPress }) => {
   return (
-    <TouchableOpacity
-      style={[
-        styles.button,
-        {
-          
-          backgroundColor: backgroundColor || '#3629B7',
-        
-          borderColor: borderColor || 'transparent', 
-        },
-      ]}
-      onPress={onPress}
-    >
-      <Text style={[styles.buttonText, { color: textColor || '#ffffff' }]}>
-        {buttonText}
-      </Text>
+    <TouchableOpacity onPress={onPress} style={styles.button}>
+      <Text style={styles.buttonText}>{buttonText}</Text>
     </TouchableOpacity>
   );
 };
 
+export default Button;
+
 const styles = StyleSheet.create({
   button: {
-    borderWidth: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-    justifyContent: 'center',
-    minWidth: 150,
+    backgroundColor: "#6A1B9A", // Purple
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    marginBottom: 20,
+    alignItems: "center",
   },
   buttonText: {
-    textTransform: 'capitalize',
+    color: "#fff",
     fontSize: 18,
-    lineHeight: 28,
-    textAlign: 'center',
-    fontFamily: 'Cabin_700Bold',
+    fontWeight: "bold",
   },
 });
-
-export default Button;
